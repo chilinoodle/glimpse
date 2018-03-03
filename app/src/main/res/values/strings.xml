@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Glimpse</string>
+    <string name="button_save">Save</string>
+    <string name="button_continue">Continue</string>
+    <string name="change"><u>Change information?</u></string>
+    <string name="name_hint">Enter your name</string>
+    <string name="choose_city">Set home city &#8230;</string>
+
 </resources>

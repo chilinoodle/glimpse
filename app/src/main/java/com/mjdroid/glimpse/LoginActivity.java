@@ -1,13 +1,12 @@
 package com.mjdroid.glimpse;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,11 +14,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 
+
 public class LoginActivity extends AppCompatActivity {
+
+    boolean infoSaved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,31 +30,74 @@ public class LoginActivity extends AppCompatActivity {
         final EditText nameField = (EditText) findViewById(R.id.name_field);
         final TextView nameFixed = (TextView) findViewById(R.id.name_fixed);
         final Spinner spinner = (Spinner) findViewById(R.id.city_spinner);
-        final TextView selectedCity = (TextView) findViewById(R.id.selected_city);
+        final TextView selectedCityView = (TextView) findViewById(R.id.selected_city);
+        final TextView changeInfo = (TextView) findViewById(R.id.change);
+        final Button saveContinue = (Button) findViewById(R.id.save_and_continue);
 
-        Button saveContinue = (Button) findViewById(R.id.save_and_continue);
+        nameFixed.setVisibility(View.INVISIBLE);
+        selectedCityView.setVisibility(View.INVISIBLE);
+        changeInfo.setVisibility(View.INVISIBLE);
+
+        saveContinue.setText(R.string.button_save);
 
         saveContinue.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
-                AlphaAnimation fadeIn = new AlphaAnimation(0.0f, 1.0f);
-                String name = nameField.getText().toString();
-                if (name == "") {
-                    nameField.setHint("Please enter your name!");
-                    nameField.setTextColor(Color.RED);
+                if (!infoSaved) {
+                    //Using custom AnimationFade class constructor
+                    AnimationFade fadeNameFixed = new AnimationFade(1000,nameFixed);
+                    AnimationFade fadeCitySelected = new AnimationFade(1000,selectedCityView);
+
+                    String name = nameField.getText().toString();
+                    String city = spinner.getSelectedItem().toString();
+
+                    if (name.matches("")) {
+                        nameField.setHint("Please enter your name!");
+                        nameField.setHintTextColor(Color.RED);
+                    } else if(spinner.getSelectedItemPosition() == 0) {
+                        Toast.makeText(LoginActivity.this,"Please choose a city",Toast.LENGTH_SHORT).show();
+                    } else {
+                        nameFixed.setText("Welcome " + name + "!");
+                        nameField.setVisibility(View.INVISIBLE);
+                        //Using custom method on custom AnimationFade class
+                        fadeNameFixed.startFadeIn();
+
+                        spinner.setVisibility(View.INVISIBLE);
+                        selectedCityView.setText("You set your home city to " + city);
+                        fadeCitySelected.startFadeIn();
+
+                        changeInfo.setVisibility(View.VISIBLE);
+
+                        saveContinue.setText(R.string.button_continue);
+                        infoSaved = true;
+                    }
+
                 } else {
-                    nameFixed.setText("Welcome " + name + "!");
-                    fadeIn.setDuration(1000);
-                    fadeIn.setFillAfter(true);
-                    nameField.setVisibility(View.INVISIBLE);
-                    nameFixed.startAnimation(fadeIn);
+
+                    Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(goToMain);
                 }
+
+            }
+        });
+
+        changeInfo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                changeInfo.setVisibility(View.INVISIBLE);
+                nameFixed.setVisibility(View.INVISIBLE);
+                selectedCityView.setVisibility(View.INVISIBLE);
+                nameField.setVisibility(View.VISIBLE);
+                spinner.setVisibility(View.VISIBLE);
+                saveContinue.setText(R.string.button_save);
+                infoSaved = false;
             }
         });
 
         ArrayList<String> cities = new ArrayList<String>();
-        cities.add("Select a city...");
+        cities.add(getString(R.string.choose_city));
         cities.add("Abu Dhabi");
         cities.add("Algiers");
         cities.add("Amman");
@@ -74,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         cities.add("Tunis");
 
         //Creating adapter for the spinner
-        ArrayAdapter<String> cityAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, cities){
+        ArrayAdapter<String> cityAdapter = new ArrayAdapter<String>(this, R.layout.city_spinner_item, cities){
             @Override
             public boolean isEnabled(int position){
                 if(position == 0)
@@ -87,10 +131,26 @@ public class LoginActivity extends AppCompatActivity {
                     return true;
                 }
             }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+
         };
 
         //Dropdown layout style
-        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cityAdapter.setDropDownViewResource(R.layout.city_spinner_dropdown_item);
 
         //spinner click listener
         spinner.setOnItemSelectedListener(new SpinnerActivity());

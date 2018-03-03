@@ -6,6 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:dropDownListViewStyle">@style/spinnerDropDownItemStyle</item>
+    </style>
+
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+
+    <style name="spinnerDropDownItemStyle" parent="android:Widget.ListView.DropDown">
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:divider">@color/colorDivider</item>
     </style>
 
 </resources>
