@@ -21,6 +21,8 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     boolean infoSaved = false;
+    String name;
+    String city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +52,16 @@ public class LoginActivity extends AppCompatActivity {
                     AnimationFade fadeNameFixed = new AnimationFade(1000,nameFixed);
                     AnimationFade fadeCitySelected = new AnimationFade(1000,selectedCityView);
 
-                    String name = nameField.getText().toString();
-                    String city = spinner.getSelectedItem().toString();
+                    name = nameField.getText().toString();
+                    city = spinner.getSelectedItem().toString();
 
                     if (name.matches("")) {
                         nameField.setHint("Please enter your name!");
                         nameField.setHintTextColor(Color.RED);
+
                     } else if(spinner.getSelectedItemPosition() == 0) {
                         Toast.makeText(LoginActivity.this,"Please choose a city",Toast.LENGTH_SHORT).show();
+
                     } else {
                         nameFixed.setText("Welcome " + name + "!");
                         nameField.setVisibility(View.INVISIBLE);
@@ -77,6 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
 
                     Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
+                    goToMain.putExtra("SelectedCity",city);
+                    goToMain.putExtra("name", name);
                     startActivity(goToMain);
                 }
 
