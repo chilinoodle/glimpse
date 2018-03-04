@@ -6,10 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LoginActivity">
 
 
@@ -17,7 +13,8 @@
         android:contentDescription="title image"
         android:id="@+id/main_image"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
+        android:padding="16dp"
         android:layout_alignParentTop="true"
         android:src="@drawable/eye_green"/>
 
@@ -26,10 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/main_image"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
         android:hint="@string/name_hint"
         android:inputType="textCapWords"
-        android:paddingLeft="16dp"/>
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"/>
 
     <TextView
         android:id="@+id/name_fixed"
@@ -38,10 +36,10 @@
         android:layout_below="@+id/main_image"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:paddingBottom="10dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:textColor="#000"
         android:textSize="18sp"
         tools:visibility="invisible"
@@ -53,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name_field"
-        android:layout_marginTop="16dp"
+        android:layout_margin="16dp"
         android:background="@drawable/spinner_bg"
         tools:text="Damascus">
 
@@ -63,11 +61,14 @@
         android:id="@+id/selected_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name_field"
-        android:layout_marginTop="16dp"
+        android:layout_below="@+id/name_fixed"
         android:gravity="center"
         android:textColor="#000"
         android:textSize="18sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         tools:visibility="invisible"
         tools:text="You set your home city to Damascus"/>
 

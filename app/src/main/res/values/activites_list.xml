@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="activities_list">
+        <item>@string/i_want_to</item>
+        <item>Take a walk</item>
+        <item>Go for a run</item>
+        <item>Go take a hike</item>
+        <item>Learn coding</item>
+        <item>Watch TV</item>
+        <item>Go to cinema</item>
+        <item>Go shopping</item>
+        <item>Go to lunch</item>
+        <item>Go to dinner</item>
+        <item>Read a book</item>
+        <item>Visit someone</item>
+        <item>Do absolutely nothing</item>
+    </string-array>
+</resources>

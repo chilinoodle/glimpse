@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
 
                     Intent goToMain = new Intent(LoginActivity.this, MainActivity.class);
-                    goToMain.putExtra("SelectedCity",city);
+                    goToMain.putExtra("selectedCity",city);
                     goToMain.putExtra("name", name);
                     startActivity(goToMain);
                 }
