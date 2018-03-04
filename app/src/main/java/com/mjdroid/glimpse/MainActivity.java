@@ -1,14 +1,11 @@
 package com.mjdroid.glimpse;
 
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-
-
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +30,28 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(goToPlanner);
             }
         });
+
+        TextView activitySelectedView = (TextView) findViewById(R.id.activity_selected);
+        TextView activityContactView = (TextView) findViewById(R.id.activity_contact);
+        TextView activityContactNumberView = (TextView) findViewById(R.id.activity_contact_number);
+        TextView activityDateView = (TextView) findViewById(R.id.activity_date);
+
+        Intent sentActivity = getIntent();
+
+        if (sentActivity.getSerializableExtra("sentActivityMap") != null) {
+
+            HashMap<String, String> sentActivityMap = (HashMap<String, String>) sentActivity.getSerializableExtra("sentActivityMap");
+            String selectedActivity = sentActivityMap.get("selectedActivity");
+            String contactName = sentActivityMap.get("withName");
+            String contactNumber = sentActivityMap.get("withNumber");
+            String date = sentActivityMap.get("date");
+
+            activitySelectedView.setText(selectedActivity);
+            activityContactView.setText(contactName);
+            activityContactNumberView.setText(contactNumber);
+            activityDateView.setText(date);
+        }
+
 
     }
 }

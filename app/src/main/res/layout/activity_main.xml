@@ -55,6 +55,33 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/activity_selected"
+        android:layout_below="@id/date_and_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Activity Selected"/>
+
+    <TextView
+        android:id="@+id/activity_date"
+        android:layout_below="@id/activity_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Tomorrow"/>
+
+    <TextView
+        android:id="@+id/activity_contact"
+        android:layout_below="@id/activity_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="You"/>
+
+    <TextView
+        android:id="@+id/activity_contact_number"
+        android:layout_below="@id/activity_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="996693972"/>
 
     <TextView
         android:id="@+id/add_button"

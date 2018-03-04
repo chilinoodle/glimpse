@@ -11,17 +11,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class PlannerActivity extends AppCompatActivity {
 
@@ -33,7 +37,10 @@ public class PlannerActivity extends AppCompatActivity {
     public TextView withName;
     public TextView withNumber;
     public TextView withWith;
+    public ImageView clearButton;
+    public Button savePlanButton;
     private static final int RESULT_PICK_CONTACT = 666;
+    public HashMap<String,String> thisActivityMap = new HashMap<String, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,9 @@ public class PlannerActivity extends AppCompatActivity {
         withName = (TextView) findViewById(R.id.with_name);
         withNumber = (TextView) findViewById(R.id.with_number);
         withWith = (TextView) findViewById(R.id.with_with);
+        savePlanButton = (Button) findViewById(R.id.save_plan);
+        clearButton = (ImageView) findViewById(R.id.clear_button);
+        clearButton.setVisibility(View.GONE);
 
         /*TODO:activate this after creating a new Activity Class if needed
         ArrayList<String> activitiesList = new ArrayList<>();
@@ -141,6 +151,15 @@ public class PlannerActivity extends AppCompatActivity {
             }
         });
 
+        savePlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendToMainIntent = new Intent(PlannerActivity.this,MainActivity.class);
+                sendToMainIntent.putExtra("sentActivityMap",thisActivityMap);
+                startActivity(sendToMainIntent);
+            }
+        });
+
     }
 
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
@@ -149,6 +168,7 @@ public class PlannerActivity extends AppCompatActivity {
             if (pos > 0) {
                 String selectedActivity = (String) parent.getItemAtPosition(pos);
                 Toast.makeText(parent.getContext(), "You've selected to " + selectedActivity, Toast.LENGTH_SHORT).show();
+                thisActivityMap.put("selectedActivity",selectedActivity);
             }
         }
 
@@ -178,10 +198,13 @@ public class PlannerActivity extends AppCompatActivity {
         }
     };
 
+    //TODO MAKE CHANGE HERE: WHEN A DATE IS NOT UPDATED (BUT LEFT HOW IT WAS BY DEFAULT, OR CANCEL WAS CLICKED) THE HASHMAP WON'T BE UPDATED
+
     private void updateDateView(TextView textView) {
         String dateFormat = "EE, d MMMM";
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         textView.setText(sdf.format(calendar.getTime()));
+        thisActivityMap.put("date",sdf.format(calendar.getTime()));
     }
 
     private void updateTimeView(TextView textView) {
@@ -224,6 +247,21 @@ public class PlannerActivity extends AppCompatActivity {
             // Set the value to the text views
             withName.setText(name);
             withNumber.setText(phoneNo);
+            clearButton.setVisibility(View.VISIBLE);
+            thisActivityMap.put("withName", name);
+            thisActivityMap.put("withNumber",phoneNo);
+
+            clearButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    withName.setText("");
+                    withNumber.setText("");
+                    clearButton.setVisibility(View.GONE);
+                    thisActivityMap.remove("withName");
+                    thisActivityMap.remove("withNumber");
+
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,6 +269,7 @@ public class PlannerActivity extends AppCompatActivity {
 
         cursor.close();
     }
+
 
 }
 
