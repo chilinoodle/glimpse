@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +53,17 @@ public class MainActivity extends AppCompatActivity {
             activityContactView.setText(contactName);
             activityContactNumberView.setText(contactNumber);
             activityDateView.setText(date);
+
+            ArrayList activities = new ArrayList<>();
+
+            PlanActivity selectedActivityObj = (PlanActivity) sentActivity.getSerializableExtra("selectedActivityObj");
+            activities.add(selectedActivityObj);
+            ActivityAdapter adapter = new ActivityAdapter(this, activities);
+            ListView listView = (ListView) findViewById(R.id.list_container);
+            listView.setAdapter(adapter);
+
         }
+
 
 
     }

@@ -1,6 +1,5 @@
 package com.mjdroid.glimpse;
 
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -39,9 +37,13 @@ public class PlannerActivity extends AppCompatActivity {
     public TextView withWith;
     public ImageView clearButton;
     public Button savePlanButton;
+    public ImageView activityImage;
     private static final int RESULT_PICK_CONTACT = 666;
     public HashMap<String,String> thisActivityMap = new HashMap<String, String>();
+    public PlanActivity selectedActivityObj = new PlanActivity("",R.drawable.eye_green,"",false,"");
 
+
+    //TODO delete HASHMAP and all .put() if sending an instance of PlanActivity worked
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,25 +57,11 @@ public class PlannerActivity extends AppCompatActivity {
         withNumber = (TextView) findViewById(R.id.with_number);
         withWith = (TextView) findViewById(R.id.with_with);
         savePlanButton = (Button) findViewById(R.id.save_plan);
+        activityImage = (ImageView) findViewById(R.id.main_image);
         clearButton = (ImageView) findViewById(R.id.clear_button);
         clearButton.setVisibility(View.GONE);
 
-        /*TODO:activate this after creating a new Activity Class if needed
-        ArrayList<String> activitiesList = new ArrayList<>();
-        activitiesList.add(getString(R.string.choose_activity));
-        activitiesList.add("Take a walk");
-        activitiesList.add("Go for a run");
-        activitiesList.add("Go take a hike");
-        activitiesList.add("Learn coding");
-        activitiesList.add("Watch TV");
-        activitiesList.add("Go to cinema");
-        activitiesList.add("Go shopping");
-        activitiesList.add("Go to lunch");
-        activitiesList.add("Go to dinner");
-        activitiesList.add("Read a book");
-        activitiesList.add("Visit someone");
-        activitiesList.add("Do absolutely nothing");
-        */
+
 
         //Gets items from resource file activities_list.xml
         String[] activity = getResources().getStringArray(R.array.activities_list);
@@ -107,7 +95,6 @@ public class PlannerActivity extends AppCompatActivity {
                 }
                 return view;
             }
-
         };
 
         //Dropdown layout style
@@ -156,19 +143,69 @@ public class PlannerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendToMainIntent = new Intent(PlannerActivity.this,MainActivity.class);
                 sendToMainIntent.putExtra("sentActivityMap",thisActivityMap);
+                sendToMainIntent.putExtra("selectedActivityObj",selectedActivityObj);
                 startActivity(sendToMainIntent);
             }
         });
-
     }
 
     public class SpinnerActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
+        private int imageInt;
+
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+
             if (pos > 0) {
                 String selectedActivity = (String) parent.getItemAtPosition(pos);
                 Toast.makeText(parent.getContext(), "You've selected to " + selectedActivity, Toast.LENGTH_SHORT).show();
-                thisActivityMap.put("selectedActivity",selectedActivity);
+                thisActivityMap.put("selectedActivity", selectedActivity);
+                selectedActivityObj.setLongText(selectedActivity);
+                switch (selectedActivity) {
+                    case "Take a walk":
+                        imageInt = R.drawable.ic_directions_walk_black_48dp;
+                        activityImage.setImageResource(imageInt);
+                        selectedActivityObj.setImageResource(imageInt);
+                        break;
+                    case "Go for a run":
+                        imageInt = R.drawable.ic_directions_run_black_48dp;
+                        break;
+                    case "Go take a hike":
+                        imageInt = R.drawable.ic_directions_walk_black_48dp;
+                        break;
+                    case "Learn coding":
+                        imageInt = R.drawable.ic_code_black_48dp;
+                        break;
+                    case "Watch TV":
+                        imageInt = R.drawable.ic_tv_black_48dp;
+                        break;
+                    case "Go to cinema":
+                        imageInt = R.drawable.ic_local_movies_black_48dp;
+                        break;
+                    case "Go shopping":
+                        imageInt = R.drawable.ic_local_grocery_store_black_48dp;
+                        break;
+                    case "Go to lunch":
+                        imageInt = R.drawable.ic_local_dining_black_48dp;
+                        break;
+                    case "Go to dinner":
+                        imageInt = R.drawable.ic_local_dining_black_48dp;
+                        break;
+                    case "Read a book":
+                        imageInt = R.drawable.ic_local_library_black_48dp;
+                        break;
+                    case "Visit someone":
+                        imageInt = R.drawable.ic_person_pin_black_48dp;
+                        break;
+                    case "Do absolutely nothing":
+                        imageInt = R.drawable.ic_weekend_black_48dp;
+                        break;
+                    default:
+                        imageInt = R.drawable.eye_green;
+                }
+
+                selectedActivityObj.setImageResource(imageInt);
+                activityImage.setImageResource(imageInt);
+
             }
         }
 
@@ -204,7 +241,8 @@ public class PlannerActivity extends AppCompatActivity {
         String dateFormat = "EE, d MMMM";
         SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
         textView.setText(sdf.format(calendar.getTime()));
-        thisActivityMap.put("date",sdf.format(calendar.getTime()));
+        thisActivityMap.put("date", sdf.format(calendar.getTime()));
+        selectedActivityObj.setDate(sdf.format(calendar.getTime()));
     }
 
     private void updateTimeView(TextView textView) {
@@ -223,7 +261,7 @@ public class PlannerActivity extends AppCompatActivity {
                     break;
             }
         } else {
-            Toast.makeText(PlannerActivity.this, "Unable to pick Contact",Toast.LENGTH_SHORT);
+            Toast.makeText(PlannerActivity.this, "Unable to pick Contact",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -249,7 +287,9 @@ public class PlannerActivity extends AppCompatActivity {
             withNumber.setText(phoneNo);
             clearButton.setVisibility(View.VISIBLE);
             thisActivityMap.put("withName", name);
-            thisActivityMap.put("withNumber",phoneNo);
+            thisActivityMap.put("withNumber", phoneNo);
+            selectedActivityObj.setHasCompany(true);
+            selectedActivityObj.setContact(name);
 
             clearButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -259,7 +299,7 @@ public class PlannerActivity extends AppCompatActivity {
                     clearButton.setVisibility(View.GONE);
                     thisActivityMap.remove("withName");
                     thisActivityMap.remove("withNumber");
-
+                    selectedActivityObj.setHasCompany(false);
                 }
             });
 
@@ -270,6 +310,4 @@ public class PlannerActivity extends AppCompatActivity {
         cursor.close();
     }
 
-
 }
-

@@ -97,4 +97,13 @@
         android:textColor="#FFF"
         android:textSize="24sp"/>
 
+    <ListView
+        android:id="@+id/list_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_contact_number"
+        android:orientation="vertical"
+        >
+    </ListView>
+
 </RelativeLayout>
